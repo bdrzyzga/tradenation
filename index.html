@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Day Trading Nation</title>
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body>
+  <nav class="light-blue lighten-1" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo center">Day Trading Nation</a>
+    </div>
+  </nav>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center green-text">Are You Ready To Trade?</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Fill out the form to get inside the trading room!</h5>
+      </div>
+      <div class="row center">
+      <form id="subscribe-form" class="col s12" action="http://facebook.us17.list-manage.com/subscribe/post-json?u=e7e2e4aacb1aaafbd5703eef1&amp;id=60579b95cf" method="post">
+      <div class="row">
+        <div class="input-field col s6">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="first_name" type="text" name="FNAME" class="validate">
+          <label for="first_name">First Name</label>
+        </div>
+        <div class="input-field col s6">
+          <i class="material-icons prefix">account_circle</i>
+          <input id="last_name" type="text" name="LNAME" class="validate">
+          <label for="last_name">Last Name</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+          <input id="email" type="email" name="EMAIL" class="validate">
+          <label for="email">Email</label>
+        </div>
+      </div>
+          <div class="row">
+           <button class="btn blue waves-effect waves-light" type="submit" name="subscribe" value="Send">Submit
+    <i class="material-icons right">send</i>
+  </button>
+          </div>
+              <div id="subscribe-result">
+          </div>
+          </form>
+        </div>
+              
+      <br><br>
+
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="section">
+
+      <!--   Icon Section   -->
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">assessment</i></h2>
+            <h5 class="center">Speeds up development</h5>
+
+            <p class="light">We did most of the heavy lifting for you to provide a Day Trading Community.</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+            <h5 class="center">User Experience Focused</h5>
+
+            <p class="light">Example of experience</p>
+          </div>
+        </div>
+
+        <div class="col s12 m4">
+          <div class="icon-block">
+            <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+            <h5 class="center">Easy to work with</h5>
+
+            <p class="light">We have provided detailed documentation as well as specific chart patterns yata yata.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <br><br>
+  </div>
+
+  <footer class="page-footer blue">
+    
+    <div class="footer-copyright">
+      <div class="container">
+      Made with <a class="blue-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="js/materialize.js"></script>
+  <script src="js/init.js"></script>
+<script>
+ $(document).ready(function(){
+        ajaxMailChimpForm($("#subscribe-form"), $("#subscribe-result"));
+        // Turn the given MailChimp form into an ajax version of it.
+        // If resultElement is given, the subscribe result is set as html to
+        // that element.
+        function ajaxMailChimpForm($form, $resultElement){
+            // Hijack the submission. We'll submit the form manually.
+            $form.submit(function(e) {
+                e.preventDefault();
+                if (!isValidEmail($form)) {
+                    var error =  "A valid email address must be provided.";
+                    $resultElement.html(error);
+                    $resultElement.css("color", "red");
+                } else {
+                    $resultElement.css("color", "black");
+                    $resultElement.html("Subscribing...");
+                    submitSubscribeForm($form, $resultElement);
+                }
+            });
+        }
+        // Validate the email address in the form
+        function isValidEmail($form) {
+            // If email is empty, show error message.
+            // contains just one @
+            var email = $form.find("input[type='email']").val();
+            if (!email || !email.length) {
+                return false;
+            } else if (email.indexOf("@") == -1) {
+                return false;
+            }
+            return true;
+        }
+        // Submit the form with an ajax/jsonp request.
+        // Based on http://stackoverflow.com/a/15120409/215821
+        function submitSubscribeForm($form, $resultElement) {
+            $.ajax({
+                type: "GET",
+                url: $form.attr("action"),
+                data: $form.serialize(),
+                cache: false,
+                dataType: "jsonp",
+                jsonp: "c", // trigger MailChimp to return a JSONP response
+                contentType: "application/json; charset=utf-8",
+                error: function(error){
+                    // According to jquery docs, this is never called for cross-domain JSONP requests
+                },
+                success: function(data){
+                    if (data.result != "success") {
+                        var message = data.msg || "Sorry. Unable to subscribe. Please try again later.";
+                        $resultElement.css("color", "red");
+                        if (data.msg && data.msg.indexOf("already subscribed") >= 0) {
+                            message = "You're already subscribed. Thank you.";
+                            $resultElement.css("color", "black");
+                        }
+                        $resultElement.html(message);
+                    } else {
+                        $resultElement.css("color", "black");
+                        $resultElement.html("Thank you!<br>You must confirm the subscription in your inbox.");
+                    }
+                }
+            });
+        }
+    });
+    </script>
+     
+   
+      <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
+<!--End mc_embed_signup-->
+  </body>
+</html>
