@@ -22,8 +22,8 @@
       <div class="row center">
         <h5 class="header col s12 light">Fill out the form to get inside the trading room!</h5>
       </div>
-      <!-- <div class="row center">
-      <form id="subscribe-form" class="col s12" action="http://facebook.us17.list-manage.com/subscribe/post-json?u=e7e2e4aacb1aaafbd5703eef1&amp;id=60579b95cf" method="post">
+       <div class="row center">
+      <form id="subscribe-form" class="col s12" >
       <div class="row">
         <div class="input-field col s6">
           <i class="material-icons prefix">account_circle</i>
@@ -44,19 +44,21 @@
         </div>
       </div>
           <div class="row">
-           <button class="btn blue waves-effect waves-light" type="submit" name="subscribe" value="Send">Submit
+           <button class="btn blue waves-effect waves-light" name="subscribe" value="Send" id="submit-form">Submit
     <i class="material-icons right">send</i>
   </button>
           </div>
               <div id="subscribe-result">
           </div>
           </form>
+
+           
         </div>
               
       <br><br>
 
     </div>
-  </div> -->
+  </div> 
 <div class="row">
     
 
@@ -95,7 +97,7 @@
 <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script><script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';fnames[0]='EMAIL';ftypes[0]='email';}(jQuery));var $mcj = jQuery.noConflict(true);</script>
 <!--End mc_embed_signup-->
     
-    </div>
+
 
   <div class="container">
     <div class="section">
@@ -147,6 +149,23 @@
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.js"></script>
-  
+             <script type="text/javascript">
+           var $form = $('form#subscribe-form'),
+    url = 'https://script.google.com/macros/u/0/s/AKfycbwHgdLCoCDTHgu3qpMowIZLCcd7VNsc_K-HWOMPof0YHlXRv6o/exec'
+
+            $('#submit-form').on('click', function(e) {
+              e.preventDefault();
+              var jqxhr = $.ajax({
+                url: url,
+                method: "GET",
+                dataType: "json",
+                data: $form.serializeObject()
+              }).success(
+                // do something
+                  $('#subscribe-result').text = "thank you!";
+              );
+            })
+           
+           </script>
   </body>
 </html>
